@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate num_derive;
+
 use std::{convert::TryFrom, num::TryFromIntError};
 
 /// EtherCAT Slave Position
@@ -101,4 +104,57 @@ pub enum Access {
     Ro,
     /// Read write
     Rw,
+}
+
+/// Data Type
+#[derive(Debug, Clone, Copy, Eq, PartialEq, Hash, FromPrimitive)]
+pub enum DataType {
+    /// BIT
+    Bool = 0x001,
+    /// BYTE
+    Byte = 0x01E,
+
+    /// SINT
+    I8 = 0x0002,
+    /// INT
+    I16 = 0x0003,
+    /// DINT
+    I32 = 0x0004,
+    /// LINT
+    I64 = 0x0015,
+
+    /// USINT
+    U8 = 0x0005,
+    /// UINT
+    U16 = 0x0006,
+    /// UDINT
+    U32 = 0x0007,
+    /// ULINT
+    U64 = 0x001B,
+
+    /// REAL
+    F32 = 0x0008,
+    /// LREAL
+    F64 = 0x0011,
+
+    /// STRING(n) a.k.a. visiable string
+    String = 0x0009,
+
+    /// ARRAY of BYTE a.k.a. Octet String
+    U8Array = 0x000A,
+
+    /// ARRAY of UINT a.k.a. Unicode String
+    U16Array = 0x000B,
+
+    I24 = 0x0010,
+    I40 = 0x0012,
+    I48 = 0x0013,
+    I56 = 0x0014,
+
+    U24 = 0x0016,
+    U40 = 0x0018,
+    U48 = 0x0019,
+    U56 = 0x001A,
+
+    Raw = 0xFFFF,
 }
