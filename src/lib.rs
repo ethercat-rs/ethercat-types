@@ -58,6 +58,22 @@ pub struct SdoIdx {
     pub sub_idx: SubIdx,
 }
 
+/// PDO Index
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct PdoIdx(u16);
+
+impl From<u16> for PdoIdx {
+    fn from(idx: u16) -> Self {
+        Self(idx)
+    }
+}
+
+impl From<PdoIdx> for u16 {
+    fn from(idx: PdoIdx) -> Self {
+        idx.0
+    }
+}
+
 /// PDO Entry Index
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct PdoEntryIdx {
