@@ -1,3 +1,5 @@
+use std::{convert::TryFrom, num::TryFromIntError};
+
 /// EtherCAT Slave Position
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub struct SlavePos(u16);
@@ -59,6 +61,13 @@ impl From<usize> for DomainIdx {
 impl From<DomainIdx> for usize {
     fn from(idx: DomainIdx) -> Self {
         idx.0
+    }
+}
+
+impl TryFrom<DomainIdx> for u64 {
+    type Error = TryFromIntError;
+    fn try_from(idx: DomainIdx) -> Result<Self, Self::Error> {
+        u64::try_from(idx.0)
     }
 }
 
