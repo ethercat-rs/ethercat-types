@@ -64,6 +64,13 @@ impl From<DomainIdx> for usize {
     }
 }
 
+impl TryFrom<DomainIdx> for u32 {
+    type Error = TryFromIntError;
+    fn try_from(idx: DomainIdx) -> Result<Self, Self::Error> {
+        u32::try_from(idx.0)
+    }
+}
+
 impl TryFrom<DomainIdx> for u64 {
     type Error = TryFromIntError;
     fn try_from(idx: DomainIdx) -> Result<Self, Self::Error> {
