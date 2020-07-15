@@ -51,6 +51,13 @@ impl From<SubIdx> for u8 {
     }
 }
 
+/// SDO Index
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct SdoIdx {
+    pub idx: Idx,
+    pub sub_idx: SubIdx,
+}
+
 /// Domain Index
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub struct DomainIdx(usize);
