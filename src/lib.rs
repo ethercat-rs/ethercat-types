@@ -165,3 +165,10 @@ pub enum DataType {
 
     Raw = 0xFFFF,
 }
+
+/// Offset of a PDO entry in the domain image.
+#[derive(Debug, Default, PartialEq, Eq, Hash)]
+pub struct Offset {
+    pub byte: usize,
+    pub bit: u32,
+}
