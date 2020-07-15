@@ -58,6 +58,13 @@ pub struct SdoIdx {
     pub sub_idx: SubIdx,
 }
 
+/// PDO Entry Index
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct PdoEntryIdx {
+    pub idx: Idx,
+    pub sub_idx: SubIdx,
+}
+
 /// Domain Index
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub struct DomainIdx(usize);
