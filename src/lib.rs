@@ -101,6 +101,32 @@ pub struct SdoInfo {
     pub name: String,
 }
 
+/// SDO Entry Information
+#[derive(Debug, Clone, PartialEq)]
+pub struct SdoEntryInfo {
+    pub slave_pos: SlavePos, // TODO: do we need this info here?
+    pub addr: SdoEntryAddr,
+    pub data_type: DataType,
+    pub bit_length: usize,
+    pub access: SdoEntryAccess,
+    pub description: String,
+}
+
+/// SDO Entry Address
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum SdoEntryAddr {
+    ByPos(SdoPos, SubIdx),
+    ByIdx(SdoIdx),
+}
+
+/// SDO Entry Access
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct SdoEntryAccess {
+    pub pre_op: Access,
+    pub safe_op: Access,
+    pub op: Access,
+}
+
 /// PDO Index
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct PdoIdx(u16);
@@ -174,9 +200,13 @@ impl From<SmIdx> for u8 {
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Hash)]
 pub enum Access {
     /// Read only
-    Ro,
+    ReadOnly,
     /// Read write
-    Rw,
+    ReadWrite,
+    /// Write only
+    WriteOnly,
+    /// Unknown access
+    Unknown,
 }
 
 /// Data Type
