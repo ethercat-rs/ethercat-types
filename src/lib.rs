@@ -121,7 +121,7 @@ pub struct SdoInfo {
 pub struct SdoEntryInfo {
     pub addr: SdoEntryAddr,
     pub data_type: DataType,
-    pub bit_len: u8,
+    pub bit_len: u16,
     pub access: SdoEntryAccess,
     pub description: String,
 }
