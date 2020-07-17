@@ -83,6 +83,22 @@ impl From<PdoPos> for u8 {
     }
 }
 
+/// PDO Entry Position
+#[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
+pub struct PdoEntryPos(u8);
+
+impl From<u8> for PdoEntryPos {
+    fn from(pos: u8) -> Self {
+        Self(pos)
+    }
+}
+
+impl From<PdoEntryPos> for u8 {
+    fn from(pos: PdoEntryPos) -> Self {
+        pos.0
+    }
+}
+
 /// SDO Index
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct SdoIdx {
@@ -142,6 +158,15 @@ pub struct PdoInfo {
     pub pos: PdoPos,
     pub idx: Idx,
     pub entry_count: u8,
+    pub name: String,
+}
+
+/// PDO Entry Meta Information
+#[derive(Debug, Clone, PartialEq)]
+pub struct PdoEntryInfo {
+    pub pos: PdoEntryPos,
+    pub entry_idx: PdoEntryIdx,
+    pub bit_length: usize,
     pub name: String,
 }
 
