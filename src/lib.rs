@@ -135,6 +135,16 @@ impl From<u16> for PdoIdx {
     }
 }
 
+/// PDO Meta Information
+#[derive(Debug, Clone, PartialEq)]
+pub struct PdoInfo {
+    pub sm: SmIdx,
+    pub pos: PdoPos,
+    pub idx: Idx,
+    pub entry_count: u8,
+    pub name: String,
+}
+
 impl From<PdoIdx> for u16 {
     fn from(idx: PdoIdx) -> Self {
         idx.0
