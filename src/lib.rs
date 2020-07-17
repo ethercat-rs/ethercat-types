@@ -90,6 +90,17 @@ pub struct SdoIdx {
     pub sub_idx: SubIdx,
 }
 
+/// SDO Meta Information
+#[derive(Debug, Clone, PartialEq)]
+pub struct SdoInfo {
+    pub slave_pos: SlavePos, // TODO: do we need this info here?
+    pub pos: SdoPos,         // TODO: do we need this info here?
+    pub idx: Idx,
+    pub max_sub_idx: SubIdx,
+    pub object_code: u8,
+    pub name: String,
+}
+
 /// PDO Index
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct PdoIdx(u16);
