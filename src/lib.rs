@@ -51,6 +51,38 @@ impl From<SubIdx> for u8 {
     }
 }
 
+/// SDO Position
+#[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
+pub struct SdoPos(u16);
+
+impl From<u16> for SdoPos {
+    fn from(pos: u16) -> Self {
+        Self(pos)
+    }
+}
+
+impl From<SdoPos> for u16 {
+    fn from(pos: SdoPos) -> Self {
+        pos.0
+    }
+}
+
+/// PDO Position
+#[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
+pub struct PdoPos(u8);
+
+impl From<u8> for PdoPos {
+    fn from(pos: u8) -> Self {
+        Self(pos)
+    }
+}
+
+impl From<PdoPos> for u8 {
+    fn from(pos: PdoPos) -> Self {
+        pos.0
+    }
+}
+
 /// SDO Index
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct SdoIdx {
