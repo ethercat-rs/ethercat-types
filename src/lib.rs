@@ -93,8 +93,7 @@ pub struct SdoIdx {
 /// SDO Meta Information
 #[derive(Debug, Clone, PartialEq)]
 pub struct SdoInfo {
-    pub slave_pos: SlavePos, // TODO: do we need this info here?
-    pub pos: SdoPos,         // TODO: do we need this info here?
+    pub pos: SdoPos, // TODO: do we need this info here?
     pub idx: Idx,
     pub max_sub_idx: SubIdx,
     pub object_code: u8,
@@ -104,7 +103,6 @@ pub struct SdoInfo {
 /// SDO Entry Information
 #[derive(Debug, Clone, PartialEq)]
 pub struct SdoEntryInfo {
-    pub slave_pos: SlavePos, // TODO: do we need this info here?
     pub addr: SdoEntryAddr,
     pub data_type: DataType,
     pub bit_length: usize,
