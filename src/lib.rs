@@ -119,7 +119,6 @@ pub struct SdoInfo {
 /// SDO Entry Information
 #[derive(Debug, Clone, PartialEq)]
 pub struct SdoEntryInfo {
-    pub addr: SdoEntryAddr,
     pub data_type: DataType,
     pub bit_len: u16,
     pub access: SdoEntryAccess,
