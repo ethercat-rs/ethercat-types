@@ -112,7 +112,7 @@ pub struct SdoInfo {
     pub pos: SdoPos, // TODO: do we need this info here?
     pub idx: Idx,
     pub max_sub_idx: SubIdx,
-    pub object_code: u8,
+    pub object_code: Option<u8>,
     pub name: String,
 }
 
