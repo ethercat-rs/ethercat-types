@@ -300,3 +300,64 @@ pub struct Offset {
     pub byte: usize,
     pub bit: u32,
 }
+
+/// ESM states
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum AlState {
+    Boot = 0x3,
+    Init = 0x1,
+    PreOp = 0x2,
+    SafeOp = 0x4,
+    Op = 0x8,
+}
+
+/// ESM states
+#[derive(Debug)]
+pub struct InvalidAlStateError;
+
+impl TryFrom<u8> for AlState {
+    type Error = InvalidAlStateError;
+    fn try_from(st: u8) -> Result<Self, Self::Error> {
+        match st {
+            1 => Ok(AlState::Init),
+            2 => Ok(AlState::PreOp),
+            3 => Ok(AlState::Boot),
+            4 => Ok(AlState::SafeOp),
+            8 => Ok(AlState::Op),
+            _ => Err(InvalidAlStateError),
+        }
+    }
+}
+
+impl From<AlState> for u8 {
+    fn from(st: AlState) -> Self {
+        st as u8
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn u8_from_al_state() {
+        assert_eq!(u8::from(AlState::Init), 1);
+        assert_eq!(u8::from(AlState::PreOp), 2);
+        assert_eq!(u8::from(AlState::Boot), 3);
+        assert_eq!(u8::from(AlState::SafeOp), 4);
+        assert_eq!(u8::from(AlState::Op), 8);
+    }
+
+    #[test]
+    fn try_al_state_from_u8() {
+        assert_eq!(AlState::try_from(1).unwrap(), AlState::Init);
+        assert_eq!(AlState::try_from(2).unwrap(), AlState::PreOp);
+        assert_eq!(AlState::try_from(3).unwrap(), AlState::Boot);
+        assert_eq!(AlState::try_from(4).unwrap(), AlState::SafeOp);
+        assert_eq!(AlState::try_from(8).unwrap(), AlState::Op);
+        assert!(AlState::try_from(0).is_err());
+        assert!(AlState::try_from(5).is_err());
+        assert!(AlState::try_from(6).is_err());
+        assert!(AlState::try_from(7).is_err());
+    }
+}
