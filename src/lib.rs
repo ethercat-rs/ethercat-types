@@ -291,6 +291,31 @@ pub enum DataType {
     U48 = 0x0019,
     U56 = 0x001A,
 
+    /// BIT 1
+    Bit1 = 0x0030,
+    /// BIT 2
+    Bit2 = 0x0031,
+    /// BIT 3
+    Bit3 = 0x0032,
+    /// BIT 4
+    Bit4 = 040033,
+    /// BIT 5
+    Bit5 = 0x0034,
+    /// BIT 6
+    Bit6 = 0x0035,
+    /// BIT 7
+    Bit7 = 0x0036,
+    /// BIT 8
+    Bit8 = 0x0037,
+
+    /// Time of Day
+    TimeOfDay = 0x000C,
+    /// Time Difference
+    TimeDifference = 0x000D,
+
+    /// Domain
+    Domain = 0x000F,
+
     Raw = 0xFFFF,
 }
 
