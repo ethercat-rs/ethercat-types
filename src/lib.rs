@@ -320,7 +320,7 @@ pub enum DataType {
 }
 
 /// Offset of a PDO entry in the domain image.
-#[derive(Debug, Default, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Hash)]
 pub struct Offset {
     pub byte: usize,
     pub bit: u32,
