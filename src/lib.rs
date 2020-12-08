@@ -298,7 +298,7 @@ pub enum DataType {
     /// BIT 3
     Bit3 = 0x0032,
     /// BIT 4
-    Bit4 = 040033,
+    Bit4 = 0x0033,
     /// BIT 5
     Bit5 = 0x0034,
     /// BIT 6
