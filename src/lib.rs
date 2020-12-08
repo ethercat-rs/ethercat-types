@@ -3,6 +3,10 @@ extern crate num_derive;
 
 use std::{convert::TryFrom, num::TryFromIntError};
 
+mod value;
+
+pub use self::value::*;
+
 /// EtherCAT Slave Position
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub struct SlavePos(u16);
