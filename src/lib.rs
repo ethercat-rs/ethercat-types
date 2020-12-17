@@ -11,6 +11,12 @@ pub use self::value::*;
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub struct SlavePos(u16);
 
+impl SlavePos {
+    pub const fn new(p: u16) -> Self {
+        Self(p)
+    }
+}
+
 impl From<u16> for SlavePos {
     fn from(pos: u16) -> Self {
         Self(pos)
@@ -26,6 +32,12 @@ impl From<SlavePos> for u16 {
 /// Object Directory Index
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub struct Idx(u16);
+
+impl Idx {
+    pub const fn new(i: u16) -> Self {
+        Self(i)
+    }
+}
 
 impl From<u16> for Idx {
     fn from(idx: u16) -> Self {
@@ -43,6 +55,12 @@ impl From<Idx> for u16 {
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub struct SubIdx(u8);
 
+impl SubIdx {
+    pub const fn new(i: u8) -> Self {
+        Self(i)
+    }
+}
+
 impl From<u8> for SubIdx {
     fn from(sub: u8) -> Self {
         Self(sub)
@@ -58,6 +76,12 @@ impl From<SubIdx> for u8 {
 /// SDO Position
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub struct SdoPos(u16);
+
+impl SdoPos {
+    pub const fn new(p: u16) -> Self {
+        Self(p)
+    }
+}
 
 impl From<u16> for SdoPos {
     fn from(pos: u16) -> Self {
@@ -75,6 +99,12 @@ impl From<SdoPos> for u16 {
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub struct PdoPos(u8);
 
+impl PdoPos {
+    pub const fn new(p: u8) -> Self {
+        Self(p)
+    }
+}
+
 impl From<u8> for PdoPos {
     fn from(pos: u8) -> Self {
         Self(pos)
@@ -90,6 +120,12 @@ impl From<PdoPos> for u8 {
 /// PDO Entry Position
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub struct PdoEntryPos(u8);
+
+impl PdoEntryPos {
+    pub const fn new(p: u8) -> Self {
+        Self(p)
+    }
+}
 
 impl From<u8> for PdoEntryPos {
     fn from(pos: u8) -> Self {
@@ -108,6 +144,15 @@ impl From<PdoEntryPos> for u8 {
 pub struct SdoIdx {
     pub idx: Idx,
     pub sub_idx: SubIdx,
+}
+
+impl SdoIdx {
+    pub const fn new(idx: u16, sub: u8) -> Self {
+        Self {
+            idx: Idx::new(idx),
+            sub_idx: SubIdx::new(sub),
+        }
+    }
 }
 
 /// SDO Meta Information
@@ -148,6 +193,12 @@ pub struct SdoEntryAccess {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct PdoIdx(u16);
 
+impl PdoIdx {
+    pub const fn new(idx: u16) -> Self {
+        Self(idx)
+    }
+}
+
 impl From<u16> for PdoIdx {
     fn from(idx: u16) -> Self {
         Self(idx)
@@ -186,9 +237,24 @@ pub struct PdoEntryIdx {
     pub sub_idx: SubIdx,
 }
 
+impl PdoEntryIdx {
+    pub const fn new(idx: u16, sub: u8) -> Self {
+        Self {
+            idx: Idx::new(idx),
+            sub_idx: SubIdx::new(sub),
+        }
+    }
+}
+
 /// Domain Index
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub struct DomainIdx(usize);
+
+impl DomainIdx {
+    pub const fn new(idx: usize) -> Self {
+        Self(idx)
+    }
+}
 
 impl From<usize> for DomainIdx {
     fn from(idx: usize) -> Self {
@@ -219,6 +285,12 @@ impl TryFrom<DomainIdx> for u64 {
 /// Sync Master Index
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub struct SmIdx(u8);
+
+impl SmIdx {
+    pub const fn new(idx: u8) -> Self {
+        Self(idx)
+    }
+}
 
 impl From<u8> for SmIdx {
     fn from(idx: u8) -> Self {
