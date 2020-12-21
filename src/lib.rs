@@ -191,17 +191,17 @@ pub struct SdoEntryAccess {
 
 /// PDO Index
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct PdoIdx(u16);
-
-impl PdoIdx {
-    pub const fn new(idx: u16) -> Self {
-        Self(idx)
-    }
+pub struct PdoIdx {
+    pub idx: Idx,
+    pub sub_idx: SubIdx,
 }
 
-impl From<u16> for PdoIdx {
-    fn from(idx: u16) -> Self {
-        Self(idx)
+impl PdoIdx {
+    pub const fn new(idx: u16, sub: u8) -> Self {
+        Self {
+            idx: Idx::new(idx),
+            sub_idx: SubIdx::new(sub),
+        }
     }
 }
 
@@ -222,12 +222,6 @@ pub struct PdoEntryInfo {
     pub entry_idx: PdoEntryIdx,
     pub bit_len: u8,
     pub name: String,
-}
-
-impl From<PdoIdx> for u16 {
-    fn from(idx: PdoIdx) -> Self {
-        idx.0
-    }
 }
 
 /// PDO Entry Index
