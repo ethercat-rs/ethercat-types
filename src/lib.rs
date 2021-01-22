@@ -412,7 +412,6 @@ pub enum AlState {
     Op = 0x8,
 }
 
-/// ESM states
 #[derive(Debug)]
 pub struct InvalidAlStateError;
 
@@ -432,6 +431,44 @@ impl TryFrom<u8> for AlState {
 
 impl From<AlState> for u8 {
     fn from(st: AlState) -> Self {
+        st as u8
+    }
+}
+
+/// Sync Master Type
+#[derive(Debug, Clone, Copy, Eq, PartialEq, Hash)]
+pub enum SmType {
+    /// Unused
+    Unused = 0,
+    /// Mailbox Write
+    MbxWr = 1,
+    /// Mailbox Read
+    MbxRd = 2,
+    /// Outputs
+    Outputs = 3,
+    /// Inputs
+    Inputs = 4,
+}
+
+#[derive(Debug)]
+pub struct InvalidSmTypeError;
+
+impl TryFrom<u8> for SmType {
+    type Error = InvalidSmTypeError;
+    fn try_from(st: u8) -> Result<Self, Self::Error> {
+        match st {
+            0 => Ok(SmType::Unused),
+            1 => Ok(SmType::MbxWr),
+            2 => Ok(SmType::MbxRd),
+            3 => Ok(SmType::Outputs),
+            4 => Ok(SmType::Inputs),
+            _ => Err(InvalidSmTypeError),
+        }
+    }
+}
+
+impl From<SmType> for u8 {
+    fn from(st: SmType) -> Self {
         st as u8
     }
 }
@@ -460,5 +497,24 @@ mod tests {
         assert!(AlState::try_from(5).is_err());
         assert!(AlState::try_from(6).is_err());
         assert!(AlState::try_from(7).is_err());
+    }
+
+    #[test]
+    fn try_sm_type_from_u8() {
+        assert_eq!(SmType::try_from(0).unwrap(), SmType::Unused);
+        assert_eq!(SmType::try_from(1).unwrap(), SmType::MbxWr);
+        assert_eq!(SmType::try_from(2).unwrap(), SmType::MbxRd);
+        assert_eq!(SmType::try_from(3).unwrap(), SmType::Outputs);
+        assert_eq!(SmType::try_from(4).unwrap(), SmType::Inputs);
+        assert!(AlState::try_from(5).is_err());
+    }
+
+    #[test]
+    fn u8_from_sm_type() {
+        assert_eq!(u8::from(SmType::Unused), 0);
+        assert_eq!(u8::from(SmType::MbxWr), 1);
+        assert_eq!(u8::from(SmType::MbxRd), 2);
+        assert_eq!(u8::from(SmType::Outputs), 3);
+        assert_eq!(u8::from(SmType::Inputs), 4);
     }
 }
