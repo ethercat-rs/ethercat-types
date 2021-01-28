@@ -29,6 +29,12 @@ impl From<SlavePos> for u16 {
     }
 }
 
+impl From<SlavePos> for usize {
+    fn from(pos: SlavePos) -> Self {
+        u16::from(pos) as usize
+    }
+}
+
 /// Object Directory Index
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub struct Idx(u16);
