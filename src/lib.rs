@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate num_derive;
 
-use std::{convert::TryFrom, num::TryFromIntError};
+use std::{convert::TryFrom, fmt, num::TryFromIntError};
 
 mod value;
 
@@ -36,7 +36,7 @@ impl From<SlavePos> for usize {
 }
 
 /// Object Directory Index
-#[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub struct Idx(u16);
 
 impl Idx {
@@ -54,6 +54,12 @@ impl From<u16> for Idx {
 impl From<Idx> for u16 {
     fn from(idx: Idx) -> Self {
         idx.0
+    }
+}
+
+impl fmt::Debug for Idx {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Idx(0x{:04X})", self.0)
     }
 }
 
@@ -522,5 +528,11 @@ mod tests {
         assert_eq!(u8::from(SmType::MbxRd), 2);
         assert_eq!(u8::from(SmType::Outputs), 3);
         assert_eq!(u8::from(SmType::Inputs), 4);
+    }
+
+    #[test]
+    fn debug_idx() {
+        assert_eq!(format!("{:?}", Idx::new(0)), "Idx(0x0000)");
+        assert_eq!(format!("{:?}", Idx::new(u16::MAX)), "Idx(0xFFFF)");
     }
 }
