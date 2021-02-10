@@ -415,7 +415,7 @@ pub struct Offset {
 }
 
 /// ESM states
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum AlState {
     Boot = 0x3,
     Init = 0x1,
