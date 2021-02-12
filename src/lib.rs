@@ -170,7 +170,7 @@ impl SdoIdx {
 /// SDO Meta Information
 #[derive(Debug, Clone, PartialEq)]
 pub struct SdoInfo {
-    pub pos: SdoPos, // TODO: do we need this info here?
+    pub pos: SdoPos,
     pub idx: Idx,
     pub max_sub_idx: SubIdx,
     pub object_code: Option<u8>,
@@ -180,6 +180,7 @@ pub struct SdoInfo {
 /// SDO Entry Information
 #[derive(Debug, Clone, PartialEq)]
 pub struct SdoEntryInfo {
+    pub sub_idx: SubIdx,
     pub data_type: DataType,
     pub bit_len: u16,
     pub access: SdoEntryAccess,
