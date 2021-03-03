@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate num_derive;
 
-use std::{convert::TryFrom, fmt, num::TryFromIntError};
+use std::{collections::HashMap, convert::TryFrom, fmt, num::TryFromIntError};
 
 mod value;
 
@@ -145,11 +145,29 @@ impl EntryIdx {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Default)]
+pub struct ObjectDict {
+    pub objects: HashMap<Idx, ObjectInfo>,
+    pub entries: HashMap<EntryIdx, EntryInfo>,
+}
+
+impl ObjectDict {
+    pub fn add_obj(&mut self, o: ObjectInfo) {
+        self.objects.insert(o.idx, o);
+    }
+    pub fn add_entry(&mut self, e: EntryInfo) {
+        self.entries.insert(e.entry_idx, e);
+    }
+    pub fn object_entries(&self, idx: Idx) -> impl Iterator<Item = (&EntryIdx, &EntryInfo)> {
+        self.entries.iter().filter(move |(x, _)| x.idx == idx)
+    }
+}
+
 /// Object Meta Information
 #[derive(Debug, Clone, PartialEq)]
 pub struct ObjectInfo {
-    pub pos: ObjectPos, // TODO: do we need this info here?
     pub idx: Idx,
+    pub pos: ObjectPos, // TODO: do we need this info here?
     pub max_sub_idx: SubIdx,
     pub object_code: Option<u8>,
     pub name: String,
@@ -158,9 +176,9 @@ pub struct ObjectInfo {
 /// Object Entry Information
 #[derive(Debug, Clone, PartialEq)]
 pub struct EntryInfo {
+    pub entry_idx: EntryIdx,
     pub bit_len: u16,
     pub name: String,
-    pub entry_idx: Option<EntryIdx>,
     pub pos: Option<EntryPos>,
     pub data_type: Option<DataType>,
     pub access: Option<EntryAccess>,
