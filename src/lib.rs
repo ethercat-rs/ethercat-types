@@ -355,7 +355,7 @@ pub struct Offset {
     pub bit: u32,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct PdoMapping {
     /// e.g. 0x1600, 0x1601, ...
     pub outputs: Vec<PdoInfo>,
