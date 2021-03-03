@@ -372,7 +372,7 @@ impl PdoMapping {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PdoInfo {
-    pub idx: EntryIdx,
+    pub idx: Idx,
     pub entries: Vec<PdoInfoEntry>,
 }
 
