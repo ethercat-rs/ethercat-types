@@ -373,7 +373,7 @@ impl PdoMapping {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PdoInfo {
     pub idx: Idx,
-    pub entries: Vec<PdoInfoEntry>,
+    pub entries: Vec<PdoEntryInfo>,
 }
 
 impl PdoInfo {
@@ -383,12 +383,12 @@ impl PdoInfo {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct PdoInfoEntry {
+pub struct PdoEntryInfo {
     pub sdo: EntryIdx,
     pub bit_len: usize,
 }
 
-impl From<u32> for PdoInfoEntry {
+impl From<u32> for PdoEntryInfo {
     fn from(data: u32) -> Self {
         let bit_len = (data & 0x_00FF) as usize;
         let obj_idx = (data >> 16) as u16;
@@ -522,7 +522,7 @@ mod tests {
 
     #[test]
     fn pdo_info_entry_from_u32() {
-        let e = PdoInfoEntry::from(0x70000320_u32);
+        let e = PdoEntryInfo::from(0x70000320_u32);
         assert_eq!(e.sdo.idx, Idx::new(0x7000));
         assert_eq!(e.sdo.sub_idx, SubIdx::new(0x03));
         assert_eq!(e.bit_len, 32);
