@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate num_derive;
 
-use std::{convert::TryFrom, fmt, num::TryFromIntError};
+use std::{collections::HashMap, convert::TryFrom, fmt, num::TryFromIntError};
 
 mod value;
 
@@ -85,80 +85,58 @@ impl From<SubIdx> for u8 {
     }
 }
 
-/// SDO Position
+/// Object Position
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
-pub struct SdoPos(u16);
+pub struct ObjectPos(u16);
 
-impl SdoPos {
+impl ObjectPos {
     pub const fn new(p: u16) -> Self {
         Self(p)
     }
 }
 
-impl From<u16> for SdoPos {
+impl From<u16> for ObjectPos {
     fn from(pos: u16) -> Self {
         Self(pos)
     }
 }
 
-impl From<SdoPos> for u16 {
-    fn from(pos: SdoPos) -> Self {
+impl From<ObjectPos> for u16 {
+    fn from(pos: ObjectPos) -> Self {
         pos.0
     }
 }
 
-/// PDO Position
+/// Object Entry Position
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
-pub struct PdoPos(u8);
+pub struct EntryPos(u8);
 
-impl PdoPos {
+impl EntryPos {
     pub const fn new(p: u8) -> Self {
         Self(p)
     }
 }
 
-impl From<u8> for PdoPos {
+impl From<u8> for EntryPos {
     fn from(pos: u8) -> Self {
         Self(pos)
     }
 }
 
-impl From<PdoPos> for u8 {
-    fn from(pos: PdoPos) -> Self {
+impl From<EntryPos> for u8 {
+    fn from(pos: EntryPos) -> Self {
         pos.0
     }
 }
 
-/// PDO Entry Position
-#[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
-pub struct PdoEntryPos(u8);
-
-impl PdoEntryPos {
-    pub const fn new(p: u8) -> Self {
-        Self(p)
-    }
-}
-
-impl From<u8> for PdoEntryPos {
-    fn from(pos: u8) -> Self {
-        Self(pos)
-    }
-}
-
-impl From<PdoEntryPos> for u8 {
-    fn from(pos: PdoEntryPos) -> Self {
-        pos.0
-    }
-}
-
-/// SDO Index
+/// Object Entry Index
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct SdoIdx {
+pub struct EntryIdx {
     pub idx: Idx,
     pub sub_idx: SubIdx,
 }
 
-impl SdoIdx {
+impl EntryIdx {
     pub const fn new(idx: u16, sub: u8) -> Self {
         Self {
             idx: Idx::new(idx),
@@ -167,95 +145,58 @@ impl SdoIdx {
     }
 }
 
-/// SDO Meta Information
+#[derive(Debug, Clone, PartialEq, Default)]
+pub struct ObjectDict {
+    pub objects: HashMap<Idx, ObjectInfo>,
+    pub entries: HashMap<EntryIdx, EntryInfo>,
+}
+
+impl ObjectDict {
+    pub fn add_obj(&mut self, o: ObjectInfo) {
+        self.objects.insert(o.idx, o);
+    }
+    pub fn add_entry(&mut self, e: EntryInfo) {
+        self.entries.insert(e.entry_idx, e);
+    }
+    pub fn object_entries(&self, idx: Idx) -> impl Iterator<Item = (&EntryIdx, &EntryInfo)> {
+        self.entries.iter().filter(move |(x, _)| x.idx == idx)
+    }
+}
+
+/// Object Meta Information
 #[derive(Debug, Clone, PartialEq)]
-pub struct SdoInfo {
-    pub pos: SdoPos, // TODO: do we need this info here?
+pub struct ObjectInfo {
     pub idx: Idx,
+    pub pos: ObjectPos, // TODO: do we need this info here?
     pub max_sub_idx: SubIdx,
     pub object_code: Option<u8>,
     pub name: String,
 }
 
-/// SDO Entry Information
+/// Object Entry Information
 #[derive(Debug, Clone, PartialEq)]
-pub struct SdoEntryInfo {
-    pub data_type: DataType,
+pub struct EntryInfo {
+    pub entry_idx: EntryIdx,
     pub bit_len: u16,
-    pub access: SdoEntryAccess,
-    pub description: String,
+    pub name: String,
+    pub pos: Option<EntryPos>,
+    pub data_type: Option<DataType>,
+    pub access: Option<EntryAccess>,
 }
 
-/// SDO Entry Address
+/// Object Entry Address
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum SdoEntryAddr {
-    ByPos(SdoPos, SubIdx),
-    ByIdx(SdoIdx),
+pub enum EntryAddr {
+    ByPos(ObjectPos, SubIdx),
+    ByIdx(EntryIdx),
 }
 
-/// SDO Entry Access
+/// Object Entry Access
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct SdoEntryAccess {
+pub struct EntryAccess {
     pub pre_op: Access,
     pub safe_op: Access,
     pub op: Access,
-}
-
-/// PDO Index
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct PdoIdx(u16);
-
-impl PdoIdx {
-    pub const fn new(idx: u16) -> Self {
-        Self(idx)
-    }
-}
-
-impl From<u16> for PdoIdx {
-    fn from(idx: u16) -> Self {
-        Self(idx)
-    }
-}
-
-/// PDO Meta Information
-#[derive(Debug, Clone, PartialEq)]
-pub struct PdoInfo {
-    pub sm: SmIdx,
-    pub pos: PdoPos,
-    pub idx: Idx,
-    pub entry_count: u8,
-    pub name: String,
-}
-
-/// PDO Entry Meta Information
-#[derive(Debug, Clone, PartialEq)]
-pub struct PdoEntryInfo {
-    pub pos: PdoEntryPos,
-    pub entry_idx: PdoEntryIdx,
-    pub bit_len: u8,
-    pub name: String,
-}
-
-impl From<PdoIdx> for u16 {
-    fn from(idx: PdoIdx) -> Self {
-        idx.0
-    }
-}
-
-/// PDO Entry Index
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct PdoEntryIdx {
-    pub idx: Idx,
-    pub sub_idx: SubIdx,
-}
-
-impl PdoEntryIdx {
-    pub const fn new(idx: u16, sub: u8) -> Self {
-        Self {
-            idx: Idx::new(idx),
-            sub_idx: SubIdx::new(sub),
-        }
-    }
 }
 
 /// Domain Index
@@ -414,6 +355,69 @@ pub struct Offset {
     pub bit: u32,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub struct PdoMapping(pub Vec<Vec<PdoAssignment>>);
+
+impl PdoMapping {
+    pub fn get(&self, slave: SlavePos) -> Option<&Vec<PdoAssignment>> {
+        self.0.get(usize::from(slave))
+    }
+    pub fn contains_sdo_entry(&self, slave: SlavePos, sdo: EntryIdx) -> bool {
+        self.get(slave)
+            .map(|x| x.iter().any(|x| x.contains_sdo_entry(sdo)))
+            .unwrap_or(false)
+    }
+    pub fn outputs(&self, slave: SlavePos) -> Option<&PdoAssignment> {
+        self.get(slave)
+            .and_then(|x| x.iter().find(|x| x.sm_type == SmType::Outputs))
+    }
+    pub fn inputs(&self, slave: SlavePos) -> Option<&PdoAssignment> {
+        self.get(slave)
+            .and_then(|x| x.iter().find(|x| x.sm_type == SmType::Inputs))
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PdoAssignment {
+    pub sm: SmIdx,
+    pub sm_type: SmType,
+    pub pdos: Vec<PdoInfo>,
+}
+
+impl PdoAssignment {
+    pub fn contains_sdo_entry(&self, sdo: EntryIdx) -> bool {
+        self.pdos.iter().any(|i| i.contains_sdo_entry(sdo))
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PdoInfo {
+    pub idx: Idx,
+    pub entries: Vec<PdoEntryInfo>,
+}
+
+impl PdoInfo {
+    pub fn contains_sdo_entry(&self, sdo: EntryIdx) -> bool {
+        self.entries.iter().any(|e| e.sdo == sdo)
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct PdoEntryInfo {
+    pub sdo: EntryIdx,
+    pub bit_len: usize,
+}
+
+impl From<u32> for PdoEntryInfo {
+    fn from(data: u32) -> Self {
+        let bit_len = (data & 0x_00FF) as usize;
+        let obj_idx = (data >> 16) as u16;
+        let obj_subidx = ((data >> 8) & 0x_0000_00FF) as u8;
+        let sdo = EntryIdx::new(obj_idx, obj_subidx);
+        Self { sdo, bit_len }
+    }
+}
+
 /// ESM states
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum AlState {
@@ -534,5 +538,13 @@ mod tests {
     fn debug_idx() {
         assert_eq!(format!("{:?}", Idx::new(0)), "Idx(0x0000)");
         assert_eq!(format!("{:?}", Idx::new(u16::MAX)), "Idx(0xFFFF)");
+    }
+
+    #[test]
+    fn pdo_info_entry_from_u32() {
+        let e = PdoEntryInfo::from(0x70000320_u32);
+        assert_eq!(e.sdo.idx, Idx::new(0x7000));
+        assert_eq!(e.sdo.sub_idx, SubIdx::new(0x03));
+        assert_eq!(e.bit_len, 32);
     }
 }

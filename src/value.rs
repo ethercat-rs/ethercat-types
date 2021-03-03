@@ -1,4 +1,4 @@
-/// EtherCAT SDO/PDO Value
+/// EtherCAT Value
 #[derive(Debug, Clone, PartialEq)]
 pub enum Value {
     /// BIT
