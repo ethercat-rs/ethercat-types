@@ -356,17 +356,37 @@ pub struct Offset {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
-pub struct PdoMapping {
-    /// e.g. 0x1600, 0x1601, ...
-    pub outputs: Vec<PdoInfo>,
-    /// e.g. 0x1A00, 0x1A001, ...
-    pub inputs: Vec<PdoInfo>,
-}
+pub struct PdoMapping(pub Vec<Vec<PdoAssignment>>);
 
 impl PdoMapping {
+    pub fn get(&self, slave: SlavePos) -> Option<&Vec<PdoAssignment>> {
+        self.0.get(usize::from(slave))
+    }
+    pub fn contains_sdo_entry(&self, slave: SlavePos, sdo: EntryIdx) -> bool {
+        self.get(slave)
+            .map(|x| x.iter().any(|x| x.contains_sdo_entry(sdo)))
+            .unwrap_or(false)
+    }
+    pub fn outputs(&self, slave: SlavePos) -> Option<&PdoAssignment> {
+        self.get(slave)
+            .and_then(|x| x.iter().find(|x| x.sm_type == SmType::Outputs))
+    }
+    pub fn inputs(&self, slave: SlavePos) -> Option<&PdoAssignment> {
+        self.get(slave)
+            .and_then(|x| x.iter().find(|x| x.sm_type == SmType::Inputs))
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PdoAssignment {
+    pub sm: SmIdx,
+    pub sm_type: SmType,
+    pub pdos: Vec<PdoInfo>,
+}
+
+impl PdoAssignment {
     pub fn contains_sdo_entry(&self, sdo: EntryIdx) -> bool {
-        self.outputs.iter().any(|i| i.contains_sdo_entry(sdo))
-            || self.inputs.iter().any(|i| i.contains_sdo_entry(sdo))
+        self.pdos.iter().any(|i| i.contains_sdo_entry(sdo))
     }
 }
 
